@@ -31,8 +31,9 @@ class PortfolioView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def get(self, request):
-        portfolio = Portfolio.objects.all()
-        serializer = PortfolioSerializer(portfolio, many=True)
+        user = request.user
+        portfolio = get_object_or_404(Portfolio, user=request.user)
+        serializer = PortfolioSerializer(portfolio)
         return Response(serializer.data)
     
     def put(self, request):
